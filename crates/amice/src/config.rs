@@ -4,6 +4,7 @@ use lazy_static::lazy_static;
 use log::warn;
 
 pub use alias_access::*;
+pub use anti_hooking::*;
 pub use basic_block_outlining::*;
 pub use bogus_control_flow::*;
 pub use clone_function::*;
@@ -28,6 +29,7 @@ pub use vm_flatten::*;
 pub use vm_virtualize::*;
 
 mod alias_access;
+mod anti_hooking;
 mod basic_block_outlining;
 mod bogus_control_flow;
 mod clone_function;
@@ -61,6 +63,7 @@ lazy_static! {
 #[amice_config_manager]
 pub struct Config {
     pub pass_order: PassOrderConfig,
+    pub anti_hooking: AntiHookingConfig,
     pub string_encryption: StringEncryptionConfig,
     pub indirect_call: IndirectCallConfig,
     pub indirect_branch: IndirectBranchConfig,

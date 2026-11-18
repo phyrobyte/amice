@@ -185,4 +185,29 @@ void amice_function_clear_stale_analysis_attrs_after_cfg_rewrite(llvm::Function 
 #endif
 }
 
+bool amice_function_has_prologue_data(llvm::Function *F) {
+    return F && F->hasPrologueData();
+}
+
+bool amice_function_is_anti_hook_safe(llvm::Function *F) {
+    if (!F || F->isDeclaration())
+        return false;
+    if (F->hasFnAttribute(llvm::Attribute::Naked))
+        return false;
+    if (F->hasFnAttribute("branch-target-enforcement"))
+        return false;
+    return true;
+}
+
+void amice_function_set_prologue_bytes(llvm::Function *F, const uint8_t *Bytes, size_t Len) {
+    if (!F || !Bytes || Len == 0)
+        return;
+    auto *Int8Ty = llvm::Type::getInt8Ty(F->getContext());
+    auto *Prologue = llvm::ConstantDataVector::getRaw(
+        llvm::StringRef(reinterpret_cast<const char *>(Bytes), Len),
+        Len,
+        Int8Ty);
+    F->setPrologueData(Prologue);
+}
+
 }

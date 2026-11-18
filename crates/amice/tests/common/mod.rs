@@ -388,6 +388,10 @@ pub struct ObfuscationConfig {
     // Lower switch
     pub lower_switch: Option<bool>,
     pub lower_switch_with_dummy_code: Option<bool>,
+
+    // Anti-hooking
+    pub anti_hooking: Option<bool>,
+    pub anti_hooking_probability: Option<u32>,
 }
 
 impl ObfuscationConfig {
@@ -423,6 +427,8 @@ impl ObfuscationConfig {
             delay_offset_loading_xor_offset: Some(true),
             lower_switch: Some(false),
             lower_switch_with_dummy_code: Some(false),
+            anti_hooking: Some(false),
+            anti_hooking_probability: None,
             ..Default::default()
         }
     }
@@ -523,6 +529,10 @@ impl ObfuscationConfig {
             "AMICE_LOWER_SWITCH_WITH_DUMMY_CODE",
             self.lower_switch_with_dummy_code
         );
+
+        // Anti-hooking
+        set_env_bool!(cmd, "AMICE_ANTI_HOOKING", self.anti_hooking);
+        set_env_num!(cmd, "AMICE_ANTI_HOOKING_PROBABILITY", self.anti_hooking_probability);
     }
 }
 

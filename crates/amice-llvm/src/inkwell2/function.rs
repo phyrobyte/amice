@@ -35,6 +35,17 @@ pub trait FunctionExt<'ctx> {
 
     fn clear_stale_analysis_attrs_after_cfg_rewrite(&self);
 
+    fn has_prologue_data(&self) -> bool;
+
+    fn is_anti_hook_safe(&self) -> bool;
+
+    /// Attach raw machine instructions as LLVM `prologue` data on this function.
+    ///
+    /// # Safety
+    /// `bytes` must contain valid, 16-byte-aligned machine instructions for the module target
+    /// that preserve ABI state and fall through directly into the function body.
+    unsafe fn set_prologue_bytes(&self, bytes: &[u8]);
+
     unsafe fn fix_stack(&self);
 
     unsafe fn fix_stack_at_terminator(&self);
@@ -118,6 +129,24 @@ impl<'ctx> FunctionExt<'ctx> for FunctionValue<'ctx> {
 
     fn clear_stale_analysis_attrs_after_cfg_rewrite(&self) {
         unsafe { ffi::amice_function_clear_stale_analysis_attrs_after_cfg_rewrite(self.as_value_ref() as LLVMValueRef) }
+    }
+
+    fn has_prologue_data(&self) -> bool {
+        unsafe { ffi::amice_function_has_prologue_data(self.as_value_ref() as LLVMValueRef) }
+    }
+
+    fn is_anti_hook_safe(&self) -> bool {
+        unsafe { ffi::amice_function_is_anti_hook_safe(self.as_value_ref() as LLVMValueRef) }
+    }
+
+    unsafe fn set_prologue_bytes(&self, bytes: &[u8]) {
+        unsafe {
+            ffi::amice_function_set_prologue_bytes(
+                self.as_value_ref() as LLVMValueRef,
+                bytes.as_ptr(),
+                bytes.len(),
+            );
+        }
     }
 
     unsafe fn fix_stack(&self) {

@@ -294,3 +294,12 @@ Source code: `crates/amice/src/aotu/shuffle_blocks`
 | --- | --- | --- |
 | `AMICE_SHUFFLE_BLOCKS` | Enable block shuffling | false |
 | `AMICE_SHUFFLE_BLOCKS_FLAGS` | Comma-separated `random`, `reverse`, `rotate`; select at least one to reorder blocks; environment flags merge with file flags | Empty |
+
+## Anti-Hooking
+
+Source code: `crates/amice/src/aotu/anti_hooking`
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| `AMICE_ANTI_HOOKING` | Attach 16-byte ABI-safe anti-hooking prologue sequences (`mov x17, x17; mov x16, x16; ...` on AArch64; `mov r10, r10; mov r11, r11; ...` + nop on x86_64) via LLVM `setPrologueData` | false |
+| `AMICE_ANTI_HOOKING_PROBABILITY` | Per-function selection probability (`0`–`100`) | 100 |

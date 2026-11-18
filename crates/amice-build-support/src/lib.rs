@@ -182,7 +182,9 @@ pub fn emit_llvm_link(probe: &LlvmProbe) {
     let libdir = probe.libdir();
     println!("cargo:rustc-link-search=native={libdir}");
 
-    if target_os() == "windows" {
+    if target_os() == "windows" && is_msvc() {
+        // MSVC/PE: the plugin DLL must bind LLVM symbols at link time against an
+        // import lib (opt.lib / lld.lib), since PE cannot leave them undefined.
         println!("cargo:rustc-link-lib=dylib=LLVM-C");
         if env::var_os("CARGO_FEATURE_WIN_LINK_OPT").is_some() {
             println!("cargo:rustc-link-lib=dylib=opt");
@@ -190,6 +192,11 @@ pub fn emit_llvm_link(probe: &LlvmProbe) {
         if env::var_os("CARGO_FEATURE_WIN_LINK_LLD").is_some() {
             println!("cargo:rustc-link-lib=dylib=lld");
         }
+    } else if target_os() == "windows" {
+        // MinGW/GNU (e.g. MSYS2): a shared libLLVM-<major>.dll is available, so
+        // resolve LLVM symbols from it at load time, the same dynamic model as
+        // Linux/macOS. No opt/lld import lib is needed or available here.
+        println!("cargo:rustc-link-lib=dylib=LLVM-{}", probe.major);
     } else {
         println!("cargo:rustc-link-lib=dylib=LLVM");
     }

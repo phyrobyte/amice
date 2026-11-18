@@ -9,10 +9,10 @@ use log::{error, info, warn};
 
 #[amice_plugin::plugin(name = "amice", version = "0.1.4", pre_code_gen_callback = pre_code_gen_callback)]
 fn plugin_registrar(builder: &mut amice_plugin::PassBuilder) {
-    if let Err(e) = env_logger::builder().try_init() {
-        warn!("amice init logger failed: {e:?}");
-        return;
-    }
+    // rustc calls plugin_registrar once per CGU / LTO PassBuilder inside the
+    // same process; logger init succeeds on the first call and must not skip
+    // callback registration on subsequent PassBuilders.
+    let _ = env_logger::builder().try_init();
 
     info!(
         "amice plugin initializing, version: {}, author: {}, llvm-sys: {}.{}",

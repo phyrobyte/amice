@@ -16,4 +16,10 @@ unsafe extern "C" {
     pub(crate) fn amice_function_is_inline_marked(function: LLVMValueRef) -> bool;
 
     pub(crate) fn amice_function_clear_stale_analysis_attrs_after_cfg_rewrite(function: LLVMValueRef);
+
+    pub(crate) fn amice_function_has_prologue_data(function: LLVMValueRef) -> bool;
+
+    pub(crate) fn amice_function_is_anti_hook_safe(function: LLVMValueRef) -> bool;
+
+    pub(crate) fn amice_function_set_prologue_bytes(function: LLVMValueRef, bytes: *const u8, len: usize);
 }
