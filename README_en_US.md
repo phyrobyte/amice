@@ -3,8 +3,16 @@
 English | [简体中文](README.md)
 
 [![Release](https://img.shields.io/github/v/release/fuqiuluo/amice?include_prereleases)](https://github.com/fuqiuluo/amice/releases)
-[![CI](https://github.com/fuqiuluo/amice/actions/workflows/linux-x64-build.yml/badge.svg)](https://github.com/fuqiuluo/amice/actions/workflows/linux-x64-build.yml)
+[![CI](https://github.com/phyrobyte/amice/actions/workflows/linux-x64-build.yml/badge.svg)](https://github.com/phyrobyte/amice/actions/workflows/linux-x64-build.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
+> **Maintained fork.** This is [`phyrobyte/amice`](https://github.com/phyrobyte/amice), an actively-maintained fork of [`fuqiuluo/amice`](https://github.com/fuqiuluo/amice). The original framework — and all credit for it — belongs to [@fuqiuluo](https://github.com/fuqiuluo) and the upstream contributors. This fork tracks upstream and adds cross-platform and hardening work:
+>
+> - **AntiHooking** — a prologue-data anti-instrumentation pass that resists runtime hooking/detour of protected functions.
+> - **Fat-LTO / multi-CGU registration fix** — passes no longer silently skip on the 2nd-and-later codegen unit in a single process, which previously broke Rust fat-LTO builds.
+> - **Windows (mingw / MSYS2) linking** — the plugin dynamically links shared `libLLVM-<major>` so it builds against the `opt` pipeline on toolchains that ship no `opt.lib` / LLVM-C.
+>
+> File issues and PRs for these changes here; questions about core Amice are best raised [upstream](https://github.com/fuqiuluo/amice).
 
 Amice is a code-obfuscation tool that ships as an LLVM pass plugin. It provides string encryption, control-flow obfuscation and instruction-level VMP virtualization for C/C++, Rust and Android native code. With a prebuilt plugin, integration is a single `-fpass-plugin` flag on your existing build — no LLVM rebuild, no compiler changes, no source modifications.
 

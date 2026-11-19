@@ -3,8 +3,16 @@
 [English](README_en_US.md) | 简体中文
 
 [![Release](https://img.shields.io/github/v/release/fuqiuluo/amice?include_prereleases)](https://github.com/fuqiuluo/amice/releases)
-[![CI](https://github.com/fuqiuluo/amice/actions/workflows/linux-x64-build.yml/badge.svg)](https://github.com/fuqiuluo/amice/actions/workflows/linux-x64-build.yml)
+[![CI](https://github.com/phyrobyte/amice/actions/workflows/linux-x64-build.yml/badge.svg)](https://github.com/phyrobyte/amice/actions/workflows/linux-x64-build.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
+> **维护型 Fork。** 这里是 [`phyrobyte/amice`](https://github.com/phyrobyte/amice)，[`fuqiuluo/amice`](https://github.com/fuqiuluo/amice) 的一个持续维护的 fork。原始框架及其全部功劳归 [@fuqiuluo](https://github.com/fuqiuluo) 和上游贡献者所有。本 fork 跟随上游，并在其基础上增加跨平台与加固相关的改动：
+>
+> - **AntiHooking** — 基于 prologue-data 的反插桩 Pass，抵御对受保护函数的运行时 hook/detour。
+> - **Fat-LTO / 多 CGU 注册修复** — 同一进程内第 2 个及之后的 codegen unit 不再静默跳过 Pass 注册（此前会破坏 Rust fat-LTO 构建）。
+> - **Windows（mingw / MSYS2）链接** — 插件动态链接共享库 `libLLVM-<major>`，使其在没有 `opt.lib` / LLVM-C 的工具链上也能面向 `opt` 流水线构建。
+>
+> 与上述改动相关的 issue 与 PR 请提交到本仓库；关于 Amice 核心的问题建议前往[上游](https://github.com/fuqiuluo/amice)。
 
 Amice 是一个以 LLVM Pass 插件形式工作的代码混淆工具，为 C/C++、Rust 和 Android 原生代码提供字符串加密、控制流混淆和指令级 VMP 虚拟化。下载预编译插件后，一条 `-fpass-plugin` 参数即可接入现有构建——不需要重新编译 LLVM，也不需要修改编译器或项目源码。
 
